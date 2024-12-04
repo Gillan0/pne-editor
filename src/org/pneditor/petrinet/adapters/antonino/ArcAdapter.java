@@ -98,5 +98,9 @@ public class ArcAdapter extends AbstractArc {
 		}
 		
 	}
+	
+	public Arc getArc() {
+		return arc;
+	}
 
 }

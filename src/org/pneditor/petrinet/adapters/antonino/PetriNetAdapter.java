@@ -28,28 +28,18 @@ public class PetriNetAdapter extends PetriNetInterface {
 
 	private PetriNet petriNet;
 	
-	private HashMap<TransitionAdapter, Transition> adapterToTransitionMap;
 	private HashMap<Transition, TransitionAdapter> transitionToAdapterMap;
-	
-	private HashMap<PlaceAdapter, Place> adapterToPlaceMap;
 	private HashMap<Place, PlaceAdapter> placeToAdapterMap;
-	
-	private HashMap<ArcAdapter, Arc> adapterToArcMap;
 	private HashMap<Arc, ArcAdapter> arcToAdapterMap;
 	
 	
 	public PetriNetAdapter() {
 		petriNet = new PetriNet();
 		
-		adapterToTransitionMap = new HashMap<TransitionAdapter, Transition>();
-		adapterToPlaceMap = new HashMap<PlaceAdapter, Place>();
-		adapterToArcMap = new HashMap<ArcAdapter, Arc>();
-		
 		transitionToAdapterMap = new HashMap<Transition, TransitionAdapter>();
 		placeToAdapterMap = new HashMap<Place, PlaceAdapter>();
 		arcToAdapterMap = new HashMap<Arc, ArcAdapter>();
 
-		
 	}
 	
 	
@@ -58,7 +48,6 @@ public class PetriNetAdapter extends PetriNetInterface {
 		try {
 			Place placeAdaptee = petriNet.addPlace(0);
 			PlaceAdapter place = new PlaceAdapter("", placeAdaptee, petriNet);
-			adapterToPlaceMap.put(place, placeAdaptee);
 			placeToAdapterMap.put(placeAdaptee, place);
 			
 			return place;
@@ -70,10 +59,9 @@ public class PetriNetAdapter extends PetriNetInterface {
 
 	@Override
 	public AbstractTransition addTransition() {
-		TransitionAdapter transition = new TransitionAdapter("");
 		Transition transitionAdaptee = this.petriNet.addTransition();
+		TransitionAdapter transition = new TransitionAdapter("", transitionAdaptee);
 		
-		adapterToTransitionMap.put(transition, transitionAdaptee);
 		transitionToAdapterMap.put(transitionAdaptee, transition);
 		
 		return transition;
@@ -84,28 +72,32 @@ public class PetriNetAdapter extends PetriNetInterface {
 		try {
 			
 			if (source instanceof AbstractPlace && destination instanceof AbstractTransition) {
-				Place p = adapterToPlaceMap.get((AbstractPlace) source);
-				Transition t = adapterToTransitionMap.get((AbstractTransition) destination);
+				PlaceAdapter placeAdapter = (PlaceAdapter) source;
+				TransitionAdapter transitionAdapter = (TransitionAdapter) destination;
+
+				Place p = placeAdapter.getPlace();
+				Transition t = transitionAdapter.getTransition();
 				
 				Arc arcAdaptee = (Arc) petriNet.addArcPT(0, p, t);
 				ArcAdapter arc = new ArcAdapter(arcAdaptee, this);
 				
 				arcToAdapterMap.put(arcAdaptee, arc);
-				adapterToArcMap.put(arc, arcAdaptee);
 				
 				return arc;
 					
 			}
 			
 			if (source instanceof AbstractTransition && destination instanceof AbstractPlace) {
-				Place p = adapterToPlaceMap.get((AbstractPlace) destination);
-				Transition t = adapterToTransitionMap.get((AbstractTransition) source);
+				PlaceAdapter placeAdapter = (PlaceAdapter) destination;
+				TransitionAdapter transitionAdapter = (TransitionAdapter) source;
+
+				Place p = placeAdapter.getPlace();
+				Transition t = transitionAdapter.getTransition();
 				
 				Arc arcAdaptee = (Arc) petriNet.addArcTP(0, p, t);
 				ArcAdapter arc = new ArcAdapter(arcAdaptee, this);
 				
 				arcToAdapterMap.put(arcAdaptee, arc);
-				adapterToArcMap.put(arc, arcAdaptee);
 				
 				return arc;
 			}
@@ -129,14 +121,16 @@ public class PetriNetAdapter extends PetriNetInterface {
 			throws UnimplementedCaseException {
 		
 		try {
-			Place p = adapterToPlaceMap.get((AbstractPlace) place);
-			Transition t = adapterToTransitionMap.get((AbstractTransition) transition);
+			PlaceAdapter placeAdapter = (PlaceAdapter) place;
+			TransitionAdapter transitionAdapter = (TransitionAdapter) transition;
+			
+			Place p = placeAdapter.getPlace();
+			Transition t = transitionAdapter.getTransition();
 			
 			Arc arcAdaptee = (Arc) petriNet.addArcDrain(0, p, t);
 			ArcAdapter arc = new ArcAdapter(arcAdaptee, this);
 			
 			arcToAdapterMap.put(arcAdaptee, arc);
-			adapterToArcMap.put(arc, arcAdaptee);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -149,14 +143,16 @@ public class PetriNetAdapter extends PetriNetInterface {
 	public AbstractArc addResetArc(AbstractPlace place, AbstractTransition transition)
 			throws UnimplementedCaseException {
 		try {
-			Place p = adapterToPlaceMap.get((AbstractPlace) place);
-			Transition t = adapterToTransitionMap.get((AbstractTransition) transition);
+			PlaceAdapter placeAdapter = (PlaceAdapter) place;
+			TransitionAdapter transitionAdapter = (TransitionAdapter) transition;
+			
+			Place p = placeAdapter.getPlace();
+			Transition t = transitionAdapter.getTransition();
 			
 			Arc arcAdaptee = (Arc) petriNet.addArcZero(0, p, t);
 			ArcAdapter arc = new ArcAdapter(arcAdaptee, this);
 			
 			arcToAdapterMap.put(arcAdaptee, arc);
-			adapterToArcMap.put(arc, arcAdaptee);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -167,11 +163,11 @@ public class PetriNetAdapter extends PetriNetInterface {
 
 	@Override
 	public void removePlace(AbstractPlace place) {
-		Place placeAdaptee = adapterToPlaceMap.get(place);
+		PlaceAdapter placeAdapter = (PlaceAdapter) place;
+		Place placeAdaptee = placeAdapter.getPlace();
 		try {
 			petriNet.removePlace(placeAdaptee);
 			
-			adapterToPlaceMap.remove(place);
 			placeToAdapterMap.remove(placeAdaptee);
 			
 		} catch (MissingPlaceException | MissingArcException e) {
@@ -183,11 +179,11 @@ public class PetriNetAdapter extends PetriNetInterface {
 
 	@Override
 	public void removeTransition(AbstractTransition transition) {
-		Transition transitionAdaptee = adapterToTransitionMap.get(transition); 
+		TransitionAdapter transitionAdapter = (TransitionAdapter) transition;
+		Transition transitionAdaptee = transitionAdapter.getTransition(); 
 		try {
 			petriNet.removeTransition(transitionAdaptee);
 			
-			adapterToTransitionMap.remove(transition);
 			transitionToAdapterMap.remove(transitionAdaptee);
 			
 		} catch (MissingTransitionException e) {
@@ -197,7 +193,8 @@ public class PetriNetAdapter extends PetriNetInterface {
 
 	@Override
 	public void removeArc(AbstractArc arc) {
-		Arc arcAdaptee = adapterToArcMap.get(arc); 
+		ArcAdapter arcAdapter = (ArcAdapter) arc;
+		Arc arcAdaptee = arcAdapter.getArc(); 
 		try {
 			
 			if (arcAdaptee instanceof ArcTP) {
@@ -208,7 +205,6 @@ public class PetriNetAdapter extends PetriNetInterface {
 	 			petriNet.removeArcPT((ArcPT) arcAdaptee);
 			}
 			
-			adapterToArcMap.remove(arc);
 			arcToAdapterMap.remove(arcAdaptee);
 			
 		} catch (MissingArcException e) {
@@ -219,13 +215,15 @@ public class PetriNetAdapter extends PetriNetInterface {
 
 	@Override
 	public boolean isEnabled(AbstractTransition transition) throws ResetArcMultiplicityException {
-		Transition transitionAdaptee = adapterToTransitionMap.get(transition); 
+		TransitionAdapter transitionAdapter = (TransitionAdapter) transition;
+		Transition transitionAdaptee = transitionAdapter.getTransition(); 
 		return transitionAdaptee.isFireable();
 	}
 
 	@Override
 	public void fire(AbstractTransition transition) throws ResetArcMultiplicityException {
-		Transition transitionAdaptee = adapterToTransitionMap.get(transition); 
+		TransitionAdapter transitionAdapter = (TransitionAdapter) transition;
+		Transition transitionAdaptee = transitionAdapter.getTransition(); 
 		try {
 			petriNet.fireTransition(transitionAdaptee);
 		} catch (NotFireableTransitionException e) {
@@ -233,16 +231,8 @@ public class PetriNetAdapter extends PetriNetInterface {
 		}
 	}
 
-	public HashMap<TransitionAdapter, Transition> getAdapterToTransitionMap() {
-		return adapterToTransitionMap;
-	}
-	
 	public HashMap<Transition, TransitionAdapter> getTransitionToAdapterMap() {
 		return transitionToAdapterMap;
-	}
-
-	public HashMap<PlaceAdapter, Place> getAdapterToPlaceMap() {
-		return adapterToPlaceMap;
 	}
 
 	public HashMap<Place, PlaceAdapter> getPlaceToAdapterMap() {
@@ -251,10 +241,6 @@ public class PetriNetAdapter extends PetriNetInterface {
 	
 	public PetriNet getPetriNet() {
 		return petriNet;
-	}
-
-	public HashMap<ArcAdapter, Arc> getAdapterToArcMap() {
-		return adapterToArcMap;
 	}
 
 	public HashMap<Arc, ArcAdapter> getArcToAdapterMap() {

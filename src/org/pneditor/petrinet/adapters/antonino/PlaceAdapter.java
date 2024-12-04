@@ -42,7 +42,11 @@ public class PlaceAdapter extends AbstractPlace {
 
 	@Override
 	public void setTokens(int tokens) {
-		this.place.setTokens(tokens);
+		place.setTokens(tokens);
+	}
+	
+	public Place getPlace() {
+		return place;
 	}
 
 }
