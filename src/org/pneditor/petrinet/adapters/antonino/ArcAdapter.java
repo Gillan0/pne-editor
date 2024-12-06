@@ -5,102 +5,151 @@ import java.util.HashMap;
 import org.pneditor.petrinet.AbstractArc;
 import org.pneditor.petrinet.AbstractNode;
 import org.pneditor.petrinet.ResetArcMultiplicityException;
-import org.pneditor.petrinet.models.antonino.Arc;
-import org.pneditor.petrinet.models.antonino.ArcDrain;
-import org.pneditor.petrinet.models.antonino.ArcPT;
-import org.pneditor.petrinet.models.antonino.ArcTP;
-import org.pneditor.petrinet.models.antonino.ArcZero;
-import org.pneditor.petrinet.models.antonino.PetriNet;
-import org.pneditor.petrinet.models.antonino.Place;
-import org.pneditor.petrinet.models.antonino.Transition;
+import org.pneditor.petrinet.models.antonino.*;
 
+/**
+ * Adapter class that bridges {@link AbstractArc} with the {@link Arc} model.
+ * It allows various types of {@link Arc} instances to be used as {@link AbstractArc}.
+ */
 public class ArcAdapter extends AbstractArc {
 
-	private Arc arc;
-	private PetriNetAdapter petriNetAdapter;
-	
-	public ArcAdapter(Arc arc, PetriNetAdapter petriNetAdapter) {
-		this.arc = arc;
-		this.petriNetAdapter = petriNetAdapter;
-	}
+    /**
+     * The wrapped {@link Arc} instance.
+     */
+    private Arc arc;
 
-	@Override
-	public AbstractNode getSource() {
-		if (arc instanceof ArcTP) {
-			Transition t = arc.getTransition();
-			HashMap<Transition, TransitionAdapter> transitionMap = petriNetAdapter.getTransitionToAdapterMap();
-			return (AbstractNode) transitionMap.get(t);	
-		}
-		if (arc instanceof ArcPT) {
-			Place p = arc.getPlace();
-			HashMap<Place, PlaceAdapter> placeMap = petriNetAdapter.getPlaceToAdapterMap();
-			return (AbstractNode) placeMap.get(p);
-		}
-		return null;
-	}
+    /**
+     * The associated {@link PetriNetAdapter} instance.
+     */
+    private PetriNetAdapter petriNetAdapter;
 
-	@Override
-	public AbstractNode getDestination() {
-		if (arc instanceof ArcTP) {
-			Place p = arc.getPlace();
-			HashMap<Place, PlaceAdapter> placeMap = petriNetAdapter.getPlaceToAdapterMap();
-			return placeMap.get(p);
-		}
-		if (arc instanceof ArcPT) {
-			Transition t = arc.getTransition();
-			HashMap<Transition, TransitionAdapter> transitionMap = petriNetAdapter.getTransitionToAdapterMap();
-			return transitionMap.get(t);
-		}
-		return null;
-	}
+    /**
+     * Constructs an {@code ArcAdapter} with the given {@link Arc} and {@link PetriNetAdapter}.
+     *
+     * @param arc the {@link Arc} instance to wrap
+     * @param petriNetAdapter the associated {@link PetriNetAdapter}
+     */
+    public ArcAdapter(Arc arc, PetriNetAdapter petriNetAdapter) {
+        this.arc = arc;
+        this.petriNetAdapter = petriNetAdapter;
+    }
 
-	@Override
-	public boolean isReset() {
-		return arc instanceof ArcZero;
-	}
+    /**
+     * Retrieves the source node of the arc.
+     *
+     * @return the source {@link AbstractNode}
+     */
+    @Override
+    public AbstractNode getSource() {
+        if (arc instanceof ArcTP) {
+            Transition t = arc.getTransition();
+            HashMap<Transition, TransitionAdapter> transitionMap = petriNetAdapter.getTransitionToAdapterMap();
+            return transitionMap.get(t);
+        }
+        if (arc instanceof ArcPT) {
+            Place p = arc.getPlace();
+            HashMap<Place, PlaceAdapter> placeMap = petriNetAdapter.getPlaceToAdapterMap();
+            return placeMap.get(p);
+        }
+        return null;
+    }
 
-	@Override
-	public boolean isRegular() {
-		return !isReset() && !isInhibitory();
-	}
+    /**
+     * Retrieves the destination node of the arc.
+     *
+     * @return the destination {@link AbstractNode}
+     */
+    @Override
+    public AbstractNode getDestination() {
+        if (arc instanceof ArcTP) {
+            Place p = arc.getPlace();
+            HashMap<Place, PlaceAdapter> placeMap = petriNetAdapter.getPlaceToAdapterMap();
+            return placeMap.get(p);
+        }
+        if (arc instanceof ArcPT) {
+            Transition t = arc.getTransition();
+            HashMap<Transition, TransitionAdapter> transitionMap = petriNetAdapter.getTransitionToAdapterMap();
+            return transitionMap.get(t);
+        }
+        return null;
+    }
 
-	@Override
-	public boolean isInhibitory() {
-		return arc instanceof ArcDrain;
-	}
+    /**
+     * Determines if the arc is a reset arc.
+     *
+     * @return {@code true} if the arc is a reset arc, {@code false} otherwise
+     */
+    @Override
+    public boolean isReset() {
+        return arc instanceof ArcZero;
+    }
 
-	@Override
-	public int getMultiplicity() throws ResetArcMultiplicityException {
-		return arc.getWeight();
-	}
+    /**
+     * Determines if the arc is a regular arc.
+     *
+     * @return {@code true} if the arc is regular, {@code false} otherwise
+     */
+    @Override
+    public boolean isRegular() {
+        return !isReset() && !isInhibitory();
+    }
 
-	@Override
-	public void setMultiplicity(int multiplicity) throws ResetArcMultiplicityException {
-		PetriNet pN = petriNetAdapter.getPetriNet();
-		
-		try {
-			if (arc instanceof ArcTP) {
-				Place p = arc.getPlace();
-				Transition t = arc.getTransition();
-				pN.removeArcTP((ArcTP) arc);
-				arc = pN.addArcTP(multiplicity, p, t);
-			}
-			
-			if (arc instanceof ArcPT) {
-				Place p = arc.getPlace();
-				Transition t = arc.getTransition();
-				pN.removeArcPT((ArcPT) arc);
-				arc = pN.addArcPT(multiplicity, p, t);
-			}
-		
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-	}
-	
-	public Arc getArc() {
-		return arc;
-	}
+    /**
+     * Determines if the arc is an inhibitory arc.
+     *
+     * @return {@code true} if the arc is inhibitory, {@code false} otherwise
+     */
+    @Override
+    public boolean isInhibitory() {
+        return arc instanceof ArcDrain;
+    }
 
+    /**
+     * Retrieves the multiplicity of the arc.
+     *
+     * @return the multiplicity of the arc
+     * @throws ResetArcMultiplicityException if the arc is a reset arc
+     */
+    @Override
+    public int getMultiplicity() throws ResetArcMultiplicityException {
+        return arc.getWeight();
+    }
+
+    /**
+     * Sets the multiplicity of the arc.
+     *
+     * @param multiplicity the new multiplicity of the arc
+     * @throws ResetArcMultiplicityException if the arc is a reset arc
+     */
+    @Override
+    public void setMultiplicity(int multiplicity) throws ResetArcMultiplicityException {
+        PetriNet petriNet = petriNetAdapter.getPetriNet();
+
+        try {
+            if (arc instanceof ArcTP) {
+                Place place = arc.getPlace();
+                Transition transition = arc.getTransition();
+                petriNet.removeArcTP((ArcTP) arc);
+                arc = petriNet.addArcTP(multiplicity, place, transition);
+            }
+
+            if (arc instanceof ArcPT) {
+                Place place = arc.getPlace();
+                Transition transition = arc.getTransition();
+                petriNet.removeArcPT((ArcPT) arc);
+                arc = petriNet.addArcPT(multiplicity, place, transition);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Retrieves the wrapped {@link Arc} instance.
+     *
+     * @return the wrapped {@link Arc}
+     */
+    public Arc getArc() {
+        return arc;
+    }
 }
