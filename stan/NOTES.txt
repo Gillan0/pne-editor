@@ -1,0 +1,19 @@
+For help understanding, check : 
+https://kariera.future-processing.pl/blog/object-oriented-metrics-by-robert-martin/
+
+Quick reminder
+Ca = Number of Incomming dependencies
+Ce = Number of Output dependencies
+I = Ce / (Ce + Ca) => Capacity of a class to change (range from 0 to 1)
+A = Ratio of abstract classes over all classes
+D = Balance between stability and abstractness
+
+model : 
+I=0 ; A=0.12 ; D=-0.875 ; Ca=4 ; Ce=0
+PetriNet.getDescriptionDetails -> ELOC : 63 Yellow Warning (green limit : 60)
+PetriNet -> ELOC : 310 Yellow Warning (green limit : 300)
+D => package is extremely stable and concrete, the situation is undesirable because the package is very stiff and can’t be extended; (cf. former source)
+
+adapters : 
+I=1 ; A=0.2 ; D=0.2 ; Ca=0 ; Ce=22
+No violations according to STAN
