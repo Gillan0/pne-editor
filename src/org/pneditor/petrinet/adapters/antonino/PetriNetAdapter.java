@@ -114,7 +114,7 @@ public class PetriNetAdapter extends PetriNetInterface {
                 Transition t = transitionAdapter.getTransition();
 
                 // Add the arc to the internal PetriNet model
-                Arc arcAdaptee = (Arc) petriNet.addArcPT(0, p, t);
+                Arc arcAdaptee = (Arc) petriNet.addArcPT(1, p, t);
                 ArcAdapter arc = new ArcAdapter(arcAdaptee, this);
 
                 // Store the mapping and return the adapter
@@ -131,7 +131,7 @@ public class PetriNetAdapter extends PetriNetInterface {
                 Transition t = transitionAdapter.getTransition();
 
                 // Add the arc to the internal PetriNet model
-                Arc arcAdaptee = (Arc) petriNet.addArcTP(0, p, t);
+                Arc arcAdaptee = (Arc) petriNet.addArcTP(1, p, t);
                 ArcAdapter arc = new ArcAdapter(arcAdaptee, this);
 
                 // Store the mapping and return the adapter
@@ -175,7 +175,7 @@ public class PetriNetAdapter extends PetriNetInterface {
             Transition t = transitionAdapter.getTransition();
 
             // Add the inhibitory arc to the internal PetriNet model
-            Arc arcAdaptee = (Arc) petriNet.addArcDrain(0, p, t);
+            Arc arcAdaptee = (Arc) petriNet.addArcDrain(1, p, t);
             ArcAdapter arc = new ArcAdapter(arcAdaptee, this);
 
             // Store the mapping and return the adapter
@@ -212,7 +212,7 @@ public class PetriNetAdapter extends PetriNetInterface {
             Transition t = transitionAdapter.getTransition();
 
             // Add the reset arc to the internal PetriNet model
-            Arc arcAdaptee = (Arc) petriNet.addArcZero(0, p, t);
+            Arc arcAdaptee = (Arc) petriNet.addArcZero(1, p, t);
             ArcAdapter arc = new ArcAdapter(arcAdaptee, this);
 
             // Store the mapping and return the adapter
