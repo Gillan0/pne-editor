@@ -144,42 +144,37 @@ public class PetriNetAdapter extends PetriNetInterface {
     @Override
     public AbstractArc addRegularArc(AbstractNode source, AbstractNode destination) throws UnimplementedCaseException {
         try {
+        	if (!(source instanceof AbstractPlace && destination instanceof AbstractTransition) 
+        		&& !(source instanceof AbstractTransition && destination instanceof AbstractPlace)) {
+        		// Throw an exception if the arc does not link a place to a transition
+                throw new UnimplementedCaseException("Arc must link a place to a transition");
+        	}
+
+        	PlaceAdapter placeAdapter = null;
+        	TransitionAdapter transitionAdapter = null;
+        	
             // Check if the arc goes from a place to a transition
             if (source instanceof AbstractPlace && destination instanceof AbstractTransition) {
-                PlaceAdapter placeAdapter = (PlaceAdapter) source;
-                TransitionAdapter transitionAdapter = (TransitionAdapter) destination;
-
-                Place p = placeAdapter.getPlace();
-                Transition t = transitionAdapter.getTransition();
-
-                // Add the arc to the internal PetriNet model
-                Arc arcAdaptee = (Arc) petriNet.addArcPT(1, p, t);
-                ArcAdapter arc = new ArcAdapter(arcAdaptee, this);
-
-                // Store the mapping and return the adapter
-                arcToAdapterMap.put(arcAdaptee, arc);
-                return arc;
+                placeAdapter = (PlaceAdapter) source;
+                transitionAdapter = (TransitionAdapter) destination;
             }
 
             // Check if the arc goes from a transition to a place
             if (source instanceof AbstractTransition && destination instanceof AbstractPlace) {
-                PlaceAdapter placeAdapter = (PlaceAdapter) destination;
-                TransitionAdapter transitionAdapter = (TransitionAdapter) source;
+                placeAdapter = (PlaceAdapter) destination;
+                transitionAdapter = (TransitionAdapter) source;
+            }            
+            Place p = placeAdapter.getPlace();
+            Transition t = transitionAdapter.getTransition();
 
-                Place p = placeAdapter.getPlace();
-                Transition t = transitionAdapter.getTransition();
+            // Add the arc to the internal PetriNet model
+            Arc arcAdaptee = (Arc) petriNet.addArcPT(1, p, t);
+            ArcAdapter arc = new ArcAdapter(arcAdaptee, this);
 
-                // Add the arc to the internal PetriNet model
-                Arc arcAdaptee = (Arc) petriNet.addArcTP(1, p, t);
-                ArcAdapter arc = new ArcAdapter(arcAdaptee, this);
+            // Store the mapping and return the adapter
+            arcToAdapterMap.put(arcAdaptee, arc);
+            return arc;
 
-                // Store the mapping and return the adapter
-                arcToAdapterMap.put(arcAdaptee, arc);
-                return arc;
-            }
-
-            // Throw an exception if the arc does not link a place to a transition
-            throw new UnimplementedCaseException("Arc must link a place to a transition");
         } catch (NegativeException |
                  MissingPlaceException |
                  MissingTransitionException |
