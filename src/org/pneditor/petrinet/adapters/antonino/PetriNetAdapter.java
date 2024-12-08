@@ -42,8 +42,48 @@ public class PetriNetAdapter extends PetriNetInterface {
         placeToAdapterMap = new HashMap<>();
         arcToAdapterMap = new HashMap<>();
     }
+
+    /**
+     * Retrieves the underlying Petri net object being adapted.
+     * This method provides access to the core functionality of the Petri net.
+     *
+     * @return the {@link PetriNet} object being adapted.
+     */
+    public PetriNet getPetriNet() {
+        return petriNet;
+    }
 	
-	
+    /**
+     * Retrieves the map of arcs to their corresponding adapters.
+     * This map is used to associate each arc in the Petri net with its adapter.
+     *
+     * @return a {@link HashMap} that maps each {@link Arc} to its {@link ArcAdapter}.
+     */
+    public HashMap<Arc, ArcAdapter> getArcToAdapterMap() {
+        return arcToAdapterMap;
+    }
+
+    /**
+     * Retrieves the map of places to their corresponding adapters.
+     * This map is used to associate each place in the Petri net with its adapter.
+     *
+     * @return a {@link HashMap} that maps each {@link Place} to its {@link PlaceAdapter}.
+     */
+    public HashMap<Place, PlaceAdapter> getPlaceToAdapterMap() {
+        return placeToAdapterMap;
+    }
+    
+    /**
+     * Retrieves the map of transitions to their corresponding adapters.
+     * This map is used to associate each transition in the Petri net with its adapter.
+     *
+     * @return a {@link HashMap} that maps each {@link Transition} to its {@link TransitionAdapter}.
+     */
+    public HashMap<Transition, TransitionAdapter> getTransitionToAdapterMap() {
+        return transitionToAdapterMap;
+    }
+
+
     /**
      * Adds a new place to the Petri net with an initial token count of 0.
      * The place is wrapped in a {@link PlaceAdapter} to bridge the internal model with the PNEditor framework.
@@ -70,7 +110,6 @@ public class PetriNetAdapter extends PetriNetInterface {
         }
         return null; // Return null if the operation fails
     }
-
 
     /**
      * Adds a new transition to the Petri net.
@@ -356,47 +395,5 @@ public class PetriNetAdapter extends PetriNetInterface {
             e.printStackTrace();
         }
     }
-
-
-    /**
-     * Retrieves the map of transitions to their corresponding adapters.
-     * This map is used to associate each transition in the Petri net with its adapter.
-     *
-     * @return a {@link HashMap} that maps each {@link Transition} to its {@link TransitionAdapter}.
-     */
-    public HashMap<Transition, TransitionAdapter> getTransitionToAdapterMap() {
-        return transitionToAdapterMap;
-    }
-
-    /**
-     * Retrieves the map of places to their corresponding adapters.
-     * This map is used to associate each place in the Petri net with its adapter.
-     *
-     * @return a {@link HashMap} that maps each {@link Place} to its {@link PlaceAdapter}.
-     */
-    public HashMap<Place, PlaceAdapter> getPlaceToAdapterMap() {
-        return placeToAdapterMap;
-    }
-
-    /**
-     * Retrieves the underlying Petri net object being adapted.
-     * This method provides access to the core functionality of the Petri net.
-     *
-     * @return the {@link PetriNet} object being adapted.
-     */
-    public PetriNet getPetriNet() {
-        return petriNet;
-    }
-
-    /**
-     * Retrieves the map of arcs to their corresponding adapters.
-     * This map is used to associate each arc in the Petri net with its adapter.
-     *
-     * @return a {@link HashMap} that maps each {@link Arc} to its {@link ArcAdapter}.
-     */
-    public HashMap<Arc, ArcAdapter> getArcToAdapterMap() {
-        return arcToAdapterMap;
-    }
-
 
 }

@@ -35,25 +35,14 @@ public class ArcAdapter extends AbstractArc {
     }
 
     /**
-     * Retrieves the source node of the arc.
+     * Retrieves the wrapped {@link Arc} instance.
      *
-     * @return the source {@link AbstractNode}
+     * @return the wrapped {@link Arc}
      */
-    @Override
-    public AbstractNode getSource() {
-        if (arc instanceof ArcTP) {
-            Transition t = arc.getTransition();
-            HashMap<Transition, TransitionAdapter> transitionMap = petriNetAdapter.getTransitionToAdapterMap();
-            return transitionMap.get(t);
-        }
-        if (arc instanceof ArcPT) {
-            Place p = arc.getPlace();
-            HashMap<Place, PlaceAdapter> placeMap = petriNetAdapter.getPlaceToAdapterMap();
-            return placeMap.get(p);
-        }
-        return null;
+    public Arc getArc() {
+        return arc;
     }
-
+    
     /**
      * Retrieves the destination node of the arc.
      *
@@ -75,36 +64,6 @@ public class ArcAdapter extends AbstractArc {
     }
 
     /**
-     * Determines if the arc is a reset arc.
-     *
-     * @return {@code true} if the arc is a reset arc, {@code false} otherwise
-     */
-    @Override
-    public boolean isReset() {
-        return arc instanceof ArcZero;
-    }
-
-    /**
-     * Determines if the arc is a regular arc.
-     *
-     * @return {@code true} if the arc is regular, {@code false} otherwise
-     */
-    @Override
-    public boolean isRegular() {
-        return !isReset() && !isInhibitory();
-    }
-
-    /**
-     * Determines if the arc is an inhibitory arc.
-     *
-     * @return {@code true} if the arc is inhibitory, {@code false} otherwise
-     */
-    @Override
-    public boolean isInhibitory() {
-        return arc instanceof ArcDrain;
-    }
-
-    /**
      * Retrieves the multiplicity of the arc.
      *
      * @return the multiplicity of the arc
@@ -113,6 +72,26 @@ public class ArcAdapter extends AbstractArc {
     @Override
     public int getMultiplicity() throws ResetArcMultiplicityException {
         return arc.getWeight();
+    }
+
+    /**
+     * Retrieves the source node of the arc.
+     *
+     * @return the source {@link AbstractNode}
+     */
+    @Override
+    public AbstractNode getSource() {
+        if (arc instanceof ArcTP) {
+            Transition t = arc.getTransition();
+            HashMap<Transition, TransitionAdapter> transitionMap = petriNetAdapter.getTransitionToAdapterMap();
+            return transitionMap.get(t);
+        }
+        if (arc instanceof ArcPT) {
+            Place p = arc.getPlace();
+            HashMap<Place, PlaceAdapter> placeMap = petriNetAdapter.getPlaceToAdapterMap();
+            return placeMap.get(p);
+        }
+        return null;
     }
 
     /**
@@ -145,11 +124,32 @@ public class ArcAdapter extends AbstractArc {
     }
 
     /**
-     * Retrieves the wrapped {@link Arc} instance.
+     * Determines if the arc is a reset arc.
      *
-     * @return the wrapped {@link Arc}
+     * @return {@code true} if the arc is a reset arc, {@code false} otherwise
      */
-    public Arc getArc() {
-        return arc;
+    @Override
+    public boolean isReset() {
+        return arc instanceof ArcZero;
+    }
+
+    /**
+     * Determines if the arc is a regular arc.
+     *
+     * @return {@code true} if the arc is regular, {@code false} otherwise
+     */
+    @Override
+    public boolean isRegular() {
+        return !isReset() && !isInhibitory();
+    }
+
+    /**
+     * Determines if the arc is an inhibitory arc.
+     *
+     * @return {@code true} if the arc is inhibitory, {@code false} otherwise
+     */
+    @Override
+    public boolean isInhibitory() {
+        return arc instanceof ArcDrain;
     }
 }

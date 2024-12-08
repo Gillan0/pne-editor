@@ -36,6 +36,35 @@ public class PlaceAdapter extends AbstractPlace {
     }
 
     /**
+     * Retrieves the wrapped {@link Place} instance.
+     *
+     * @return the wrapped {@link Place}
+     */
+    public Place getPlace() {
+        return place;
+    }
+    
+    /**
+     * Retrieves the number of tokens in the place.
+     *
+     * @return the number of tokens in the place
+     */
+    @Override
+    public int getTokens() {
+        return place.getTokens();
+    }
+    
+    /**
+     * Sets the number of tokens in the place.
+     *
+     * @param tokens the number of tokens to set in the place
+     */
+    @Override
+    public void setTokens(int tokens) {
+        place.setTokens(tokens);
+    }
+    
+    /**
      * Adds a single token to the place.
      * Delegates to the {@link PetriNet#addTokens(Place, int)} method.
      */
@@ -61,32 +90,4 @@ public class PlaceAdapter extends AbstractPlace {
         }
     }
 
-    /**
-     * Retrieves the number of tokens in the place.
-     *
-     * @return the number of tokens in the place
-     */
-    @Override
-    public int getTokens() {
-        return place.getTokens();
-    }
-
-    /**
-     * Sets the number of tokens in the place.
-     *
-     * @param tokens the number of tokens to set in the place
-     */
-    @Override
-    public void setTokens(int tokens) {
-        place.setTokens(tokens);
-    }
-
-    /**
-     * Retrieves the wrapped {@link Place} instance.
-     *
-     * @return the wrapped {@link Place}
-     */
-    public Place getPlace() {
-        return place;
-    }
 }
