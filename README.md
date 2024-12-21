@@ -1,6 +1,6 @@
-#Petri Net Editor
+# Petri Net Editor
 
-#About the Project
+# About the Project
 
 This project is a Petri Net Editor designed to model and analyze the behavior of discrete-event systems, such as computing or industrial processes. A Petri net is a mathematical model consisting of:
 
@@ -18,7 +18,7 @@ This simulation uses a formerly developped user interface. Our implementation Si
 Java Implementation: Developed in Java (version 23.0.1) with JUnit 5 for model testing (model tests not included).
 
 
-#Getting Started
+# Getting Started
 
 Prerequisites
 Java Development Kit (JDK): Ensure you have JDK 23.0.1 or higher installed.
@@ -29,25 +29,25 @@ Copy code
 git clone https://github.com/Gillan0/pne-editor.git
 Open the project in your preferred IDE.
 
-#Running the Simulation
+# Running the Simulation
 
 Navigate to the src/org/petrinet/editor/Main.java class
 Run the class and you will have access to the user interface to build and run your own Petri net !
 
-#Development
+# Development
 
 This project was developed by Antonino GILLARD and Othmane EL AKRABA as part of a university assignment. The source code is managed via Github.
 
 
-#Technologies Used:
+# Technologies Used:
 
 Java 23.0.1
 
-#Contribution
+# Contribution
 This project 
 is closed for external contributions, but feel free to fork the repository for personal use. If you'd like to provide feedback, contact the developers directly.
 
-#License
+# License
 
 This project is licenced under the GNU GPLv3.
 Except for our model and the adapters developped, all credit goes to Martin Riesz <riesz.martin at gmail.com>
