@@ -4,10 +4,10 @@
 
 This project is a Petri Net Editor designed to model and analyze the behavior of discrete-event systems, such as computing or industrial processes. A Petri net is a mathematical model consisting of: \
 <ul>
-<li>Places: Represent states and hold tokens.<li>
+<li>Places: Represent states and hold tokens.</li>
 <li>Transitions: Represent events or changes.</li>
 <li>Arcs: Connect places and transitions with a defined value (default: 1).</li>
-<ul>
+</ul>
 
 ## How it Works
 A transition is enabled when its input places have enough tokens to satisfy the incoming arc values.
