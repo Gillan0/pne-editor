@@ -2,7 +2,7 @@
 
 ## About the Project
 
-This project is a Petri Net Editor designed to model and analyze the behavior of discrete-event systems, such as computing or industrial processes. A Petri net is a mathematical model consisting of: \
+This project is a Petri Net Editor designed to model and analyze the behavior of discrete-event systems, such as computing or industrial processes. A Petri net is a mathematical model consisting of:
 <ul>
 <li>Places: Represent states and hold tokens.</li>
 <li>Transitions: Represent events or changes.</li>
@@ -12,16 +12,16 @@ This project is a Petri Net Editor designed to model and analyze the behavior of
 ## How it Works
 A transition is enabled when its input places have enough tokens to satisfy the incoming arc values.
 When a transition fires, tokens are transferred from input places to output places based on the arc values.
-The simulation allows dynamic changes to token distribution, enabling the modeling of complex system behaviors, with a visual interface.\
+The simulation allows dynamic changes to token distribution, enabling the modeling of complex system behaviors, with a visual interface.
 
-This simulation uses a formerly developped user interface. Our implementation Simply adapts our Petri Net Simulation project to be used in this wrapper.\
+This simulation uses a formerly developped user interface. Our implementation Simply adapts our Petri Net Simulation project to be used in this wrapper.
 
 Java Implementation: Developed in Java (version 23.0.1) with JUnit 5 for model testing (model tests not included).
 
 
 # Getting Started
-##Installation
-Clone the repository:\
+Installation : \
+Clone the repository:
 ```
 git clone https://github.com/Gillan0/pne-editor.git
 ```
@@ -38,7 +38,7 @@ This project was developed by Antonino GILLARD and Othmane EL AKRABA as part of 
 
 
 # Technologies Used:
-Java Development Kit (JDK): Ensure you have JDK 23.0.1 or higher installed.\
+Java Development Kit (JDK): Ensure you have JDK 23.0.1 or higher installed. 
 
 # Contribution
 This project is closed for external contributions, but feel free to fork the repository for personal use. If you'd like to provide feedback, contact the developers directly.
